@@ -51,8 +51,13 @@ public class MynewTech15min extends HttpServlet {
 		
 		
 		String Duration = (String) session.getAttribute("chartintervalselected");
+
+
 		if(Duration == null)
-			Duration ="300";
+			Duration = (String) session.getAttribute("defaultperiod");
+		
+		if(Duration == null)
+			Duration = "600";
 		
 		String list = (String) session.getAttribute("nseselected");
 		
@@ -72,7 +77,7 @@ public class MynewTech15min extends HttpServlet {
 			if(Duration.equals("300"))
 			lowdiff = "-3";
 			else if(Duration.equals("600"))
-				highdiff = "-6";
+				lowdiff = "-6";
 			else
 				lowdiff = "-1.5";
 		

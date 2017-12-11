@@ -46,15 +46,30 @@ public class NsetechbasedataupdateServlet extends HttpServlet {
 		String Duration = (String) session.getAttribute("chartintervalselected");
 		
 		if(Duration == null)
-			Duration = "300";
+			Duration = (String) session.getAttribute("defaultperiod");
+		
+		if(Duration == null)
+			Duration = "600";
+		
+		String usemonth = (String) session.getAttribute("Usemonth");
 		
 		HashMap <String,String> tnd = (HashMap <String,String>)  session.getAttribute("Trendperiodselected");
-		String trendsetting = tnd.get(Duration);
-		if (trendsetting == null)
-			trendsetting = "12-8";
+		
+		String trendsetting = "12-8";
+		if (usemonth.equals("Y") && Integer.parseInt(Duration) > 250)
+		{
+			trendsetting = tnd.get("900");
+		}
+		else
+		{
+			trendsetting = tnd.get(Duration);
+		    usemonth="N";
+		}
+		
+		
 		
 		String stochperiod = (String) session.getAttribute("stochperiod");
-		Thread thread = new Thread(new Nsebasedatadnldcarmilla(Duration,trendsetting,stochperiod));
+		Thread thread = new Thread(new Nsebasedatadnldcarmilla(Duration,trendsetting,stochperiod,usemonth));
 		thread.start();
 		doGet(request,response);
 	}

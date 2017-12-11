@@ -57,9 +57,91 @@ public class Loadservlet extends HttpServlet {
 		session.setAttribute("monthpivot", getmonthpivot());
 		session.setAttribute("stochperiod",getstochperiod());
 			session.setAttribute("Trendperiodselected", gettrend());
+			session.setAttribute("Usemonth", getusemonth());
+			session.setAttribute("defaultperiod", getdefaultperiod());
 		
 	request.getRequestDispatcher("./LoginHome/dashboardhome.jsp").forward(request, response);
 		//request.getRequestDispatcher("angtest.html").forward(request, response);
+	}
+
+	private String getdefaultperiod() {
+		// TODO Auto-generated method stub
+		String tsettings = "N";
+		Dataconn dataconn = new Dataconn();
+		Connection conn = dataconn.getconn();
+		java.sql.PreparedStatement ps =null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement("select setting from othersetting where key1=\"DF_PERIOD\"");
+			 rs = ps.executeQuery();
+			while (rs.next())
+			{
+				tsettings=rs.getString(1);
+				
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			try {
+					ps.close();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			e.printStackTrace();
+		}
+		try {
+			rs.close();
+			ps.close();
+			dataconn.closeconn();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		return tsettings;
+	}
+
+	private String getusemonth() {
+		// TODO Auto-generated method stub
+		String tsettings = "N";
+		Dataconn dataconn = new Dataconn();
+		Connection conn = dataconn.getconn();
+		java.sql.PreparedStatement ps =null;
+		ResultSet rs = null;
+		try {
+			ps = conn.prepareStatement("select setting from othersetting where key1=\"MM_TD_USE\"");
+			 rs = ps.executeQuery();
+			while (rs.next())
+			{
+				tsettings=rs.getString(1);
+				
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			try {
+					ps.close();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			e.printStackTrace();
+		}
+		try {
+			rs.close();
+			ps.close();
+			dataconn.closeconn();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		return tsettings;
 	}
 
 	private String getstochperiod() {

@@ -43,6 +43,7 @@ public class Nsebasedatadnldcarmilla implements java.lang.Runnable{
 	public int dayrange = 0;
 	public String actualinterval;
 	public int stochperiod = 0;
+	public String usemonth="N";
 	public Nsebasedatadnldcarmilla(String p) {
 		// TODO Auto-generated constructor stub
 		this.interval = Integer.parseInt(p);
@@ -62,7 +63,7 @@ public class Nsebasedatadnldcarmilla implements java.lang.Runnable{
 		this.interval = this.interval*60;
 	}
 	
-	public Nsebasedatadnldcarmilla(String duration, String tndsetting,String stochperiod) {
+	public Nsebasedatadnldcarmilla(String duration, String tndsetting,String stochperiod, String usemonth) {
 		// TODO Auto-generated constructor stub
 		System.out.println("using"+tndsetting);
 		this.interval = Integer.parseInt(duration);
@@ -70,6 +71,7 @@ public class Nsebasedatadnldcarmilla implements java.lang.Runnable{
 		this.actualinterval = duration;
 		this.dayrange = this.interval/5;
 		this.trensetting = tndsetting;
+		this.usemonth =usemonth;
 		if(this.interval == 5)
 			this.dayrange=2;
 		
@@ -138,6 +140,11 @@ public class Nsebasedatadnldcarmilla implements java.lang.Runnable{
         ArrayList<Float> obvvol = new ArrayList<Float>();
         ArrayList<Float> close = new ArrayList<Float>();
         ArrayList<Float> highlow2 = new ArrayList<Float>();
+        
+        ArrayList<Float> monthlowarray = new ArrayList<Float>();
+        ArrayList<Float> monthhigharray = new ArrayList<Float>();
+        ArrayList<Float> monthclosearray = new ArrayList<Float>();
+        
         
         try {
 			Thread.sleep(1000);
@@ -332,9 +339,8 @@ public class Nsebasedatadnldcarmilla implements java.lang.Runnable{
 		}
         
         ArrayList<TickData> Converttick = new ArrayList<TickData>();
-       
+        ArrayList<TickData> monthtick = new ArrayList<TickData>();
        if((this.interval/60) > 400 && (this.interval/60) < 800 )
-        //Converttick = getconvertedtick(tickhash,this.interval);
     	   Converttick = getweektick(tickhash,this.interval);
        else if((this.interval/60) > 800 && (this.interval/60) < 1100 )
     	   Converttick = getmonthtick(tickhash,this.interval);
@@ -342,6 +348,19 @@ public class Nsebasedatadnldcarmilla implements java.lang.Runnable{
         Converttick = tickhash;
         // check this logic
         
+       if(this.usemonth.equals("Y"))
+       {
+    	   System.out.println("using month");
+    	   if((this.interval/60) < 850)
+              monthtick = getmonthtick(tickhash,this.interval);
+              else
+            	  monthtick =Converttick;
+    	    
+       }
+       else
+       {
+    	   monthtick =Converttick;
+       }
         /* create and add to the data
          * 
          *
@@ -435,6 +454,41 @@ public class Nsebasedatadnldcarmilla implements java.lang.Runnable{
         	
         }
         
+        for (int il=0; il <monthtick.size();il++)
+        {
+        	TickData Currtickdata = monthtick.get(il);
+        	
+        	monthlowarray.add(Currtickdata.getLowprice());
+        	monthhigharray.add(Currtickdata.getHighprice());
+        	monthclosearray.add(Currtickdata.getCloseprice());
+        	
+        }
+        
+        float[] mlarray = new float[monthlowarray.size()];
+        int oo =0;
+        
+        for (Float f : monthlowarray)
+        {
+        	mlarray[oo++] = (f !=null ? f: Float.NaN);
+        }
+        
+        oo=0;
+        float[] mharray = new float[monthhigharray.size()];
+        
+        for (Float f : monthhigharray)
+        {
+        	mharray[oo++] = (f !=null ? f: Float.NaN);
+        }
+        
+        
+        oo=0;
+        
+        float[] mcarray = new float[monthclosearray.size()];
+        
+        for (Float f: monthclosearray)
+        {
+        	mcarray[oo++] = (f !=null ? f: Float.NaN);
+        }
         
         float[] lowArray = new float[low.size()];
         int k = 0;
@@ -575,7 +629,7 @@ public class Nsebasedatadnldcarmilla implements java.lang.Runnable{
         	   
            }
  
- float [] sptnd = getsupertrend(closeArray,highArray,lowArray,c1,this.actualinterval,this.trensetting);
+ float [] sptnd = getsupertrend(mcarray,mharray,mlarray,c1,this.actualinterval,this.trensetting);
  float [] sptnd7 = getsupertrend7(closeArray,highArray,lowArray,c1);
  // float [] linragg = getLinearggslope(closeArray,highArray,lowArray,c1,100);
  // System.out.println("linearreg:"+Stocksymbol +":"+ linragg[0]);
@@ -671,7 +725,7 @@ System.out.println(st.getStocksymbol()+":"+st.getDownvalue()+":"+st.getUpvalue()
 							 volume = currdata.getVolume();
 							 
 							}
-							else if (i == tickhash.size())
+							else if (i == tickhash.size()-1)
 							{
 							TickData newdata = new TickData();
 								 newdata.setOpenprice(openprice);
@@ -682,7 +736,8 @@ System.out.println(st.getStocksymbol()+":"+st.getDownvalue()+":"+st.getUpvalue()
 			        	 // newdata.setTickend(tickendtime);
 			        	  newdata.setVolume(volume);
 						  result.add(newdata);
-						  
+						  System.out.println("lasttick");
+						  System.out.println("open:"+newdata.getOpenprice()+" High: "+newdata.getHighprice()+" low: "+newdata.getLowprice() +" Close: "+newdata.getCloseprice());
 							}
 							else
 							{
@@ -787,7 +842,7 @@ System.out.println(st.getStocksymbol()+":"+st.getDownvalue()+":"+st.getUpvalue()
 			        	 // newdata.setTickend(tickendtime);
 			        	  newdata.setVolume(volume);
 						  result.add(newdata);
-						  
+						  System.out.println("open:"+newdata.getOpenprice()+" High: "+newdata.getHighprice()+" low: "+newdata.getLowprice() +" Close: "+newdata.getCloseprice());
 							}
 							else
 							{
@@ -811,7 +866,7 @@ System.out.println(st.getStocksymbol()+":"+st.getDownvalue()+":"+st.getUpvalue()
 			        	 // newdata.setTickend(tickendtime);
 			        	  newdata.setVolume(volume);
 						  result.add(newdata);
-						  
+						  System.out.println("open:"+newdata.getOpenprice()+" High: "+newdata.getHighprice()+" low: "+newdata.getLowprice() +" Close: "+newdata.getCloseprice());
 						  currentweek = cal1.get(Calendar.WEEK_OF_YEAR) ;
 							 openprice = currdata.getOpenprice();
 							 closeprice = currdata.getCloseprice();
@@ -979,7 +1034,8 @@ return new float[] { 0.0f, 0.0f,0.0f };
         MInteger begin = new MInteger();
         MInteger length = new MInteger();
         
-        int period =12, factor = 8;
+        int period =12;
+        float factor = 8;
         
         if(trensetting != null)
         {
@@ -987,8 +1043,9 @@ return new float[] { 0.0f, 0.0f,0.0f };
         	{
         		String settingsar[] = trensetting.split("-");
         		period = Integer.parseInt(settingsar[0]);
-        		factor = Integer.parseInt(settingsar[1]);
         		
+        		// factor = Integer.parseInt(settingsar[1]);
+        		factor = Float.valueOf(settingsar[1]);
         		System.out.println(period+"period"+":"+factor+"factor");
         	}
         }
@@ -1008,7 +1065,7 @@ return new float[] { 0.0f, 0.0f,0.0f };
         	if(factorVar.length() >=1)
         	{
         		System.out.println("read factor from env variable as : "+factorVar);
-        		factor = Integer.parseInt(factorVar);
+        		factor = Float.valueOf(factorVar);
         	}
         
         

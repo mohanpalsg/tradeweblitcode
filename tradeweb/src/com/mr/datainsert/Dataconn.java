@@ -17,8 +17,8 @@ public class Dataconn {
 		String finaldb = "motradedb";
 		String finalport = "3306";
 		
-	//	finalhost = "localhost";
-	//	finaluname = "root";
+	finalhost = "localhost";
+		finaluname = "root";
 		
 		String sqlhost = System.getenv("SQLHOST");
 		String sqldb = System.getenv("SQLDB");
