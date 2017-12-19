@@ -30,7 +30,7 @@ static int interval =600*60;
 	{
 		Dataconn dataconn =new Dataconn();
 		Connection conn = dataconn.getconn();
-		Nsebasedatadnldcarmilla ft = new Nsebasedatadnldcarmilla("900","2-6","21");
+		Nsebasedatadnldcarmilla ft = new Nsebasedatadnldcarmilla("1","20-100","21");
 		StockOtherTechnicals st = ft.getstochdata("ADANIPORTS",conn);
 		System.out.println(st.getDayk()+";"+st.getDayd()+";"+st.getDownvalue()+";"+st.getUpvalue());
      

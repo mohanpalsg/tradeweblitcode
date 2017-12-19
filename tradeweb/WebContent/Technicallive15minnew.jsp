@@ -142,6 +142,10 @@ function OthertechtimeFormChange() {
 							
 							<select id="PeriodSelect" onchange="OthertechtimeFormChange()" >
  
+  <option value="1"  <c:if test="${Minselect eq '1'}">
+selected
+</c:if>>1Min</option>
+
  <option value="5"  <c:if test="${Minselect eq '5'}">
 selected
 </c:if>>5Min</option>

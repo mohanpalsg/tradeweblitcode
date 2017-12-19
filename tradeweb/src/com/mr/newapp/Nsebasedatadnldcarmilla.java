@@ -531,8 +531,8 @@ public class Nsebasedatadnldcarmilla implements java.lang.Runnable{
         
         Integer Length = low.size();
         Core c1 = new Core();
-        double[] closePrice = new double[5000];
-        double[] out = new double[5000];
+        double[] closePrice = new double[7000];
+        double[] out = new double[7000];
         MInteger begin = new MInteger();
         MInteger length = new MInteger();
         
@@ -674,8 +674,8 @@ System.out.println(st.getStocksymbol()+":"+st.getDownvalue()+":"+st.getUpvalue()
 
 	private double[] getrsistochvals(float[] closeArray, RetCode retCode, Core c1,int pd) {
 		// TODO Auto-generated method stub
-		 double[] outFastK = new double[5000];
-		 double[] outFastD = new double[5000];
+		 double[] outFastK = new double[7000];
+		 double[] outFastD = new double[7000];
 	        MInteger begin = new MInteger();
 	        MInteger length = new MInteger();
         float stk = 50,std = 50;
@@ -785,7 +785,7 @@ System.out.println(st.getStocksymbol()+":"+st.getDownvalue()+":"+st.getUpvalue()
 
 	private float[] getLinearggslope(float[] closeArray, float[] highArray, float[] lowArray, Core c1,int pd) {
 		// TODO Auto-generated method stub
-		double[] out = new double[5000];
+		double[] out = new double[7000];
 		
         MInteger begin = new MInteger();
         MInteger length = new MInteger();
@@ -1030,7 +1030,7 @@ return new float[] { 0.0f, 0.0f,0.0f };
 	private float[] getsupertrend(float[] closeArray, float[] highArray, float[] lowArray, Core c, String actualinterval2, String trensetting) {
 		// TODO Auto-generated method stub
 		
-		double[] out = new double[5000];
+		double[] out = new double[7000];
         MInteger begin = new MInteger();
         MInteger length = new MInteger();
         
@@ -1309,8 +1309,8 @@ String minend15 = "1200,1215,1230,1245,1300,1315,1330,1345,1400,1415,1430,1445,1
 
 	private static double[] getstochvals(float[] lowdiffArray, float[] highdiffArray, float[] obvArray, float[] lowArray,
 			RetCode retCode, Core c) {
-		 double[] outFastK = new double[5000];
-			double[] outFastD = new double[5000];
+		 double[] outFastK = new double[7000];
+			double[] outFastD = new double[7000];
 			MInteger outNBElement = new MInteger(); 
 			MInteger outBegIdx = new MInteger(); 
 			
